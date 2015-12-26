@@ -28,6 +28,16 @@ var App = React.createClass({
             context: this,
             state: 'fishes'
         });
+
+        var state = localStorage.getItem('order-' + this.props.params.storeId);
+
+        if (state) {
+            this.setState({ order: JSON.parse(state) });
+        }
+    },
+
+    componentWillUpdate: function(nextProps, nextState) {
+        localStorage.setItem('order-' + this.props.params.storeId, JSON.stringify(nextState.order));
     },
 
     addToOrder: function(key) {
@@ -166,7 +176,7 @@ var Order = React.createClass({
         }
 
         return (
-            <li>
+            <li key={key}>
                 {count}lbs
                 {fish.name}
                 <span className="price">{h.formatPrice(count * fish.price)}</span>
