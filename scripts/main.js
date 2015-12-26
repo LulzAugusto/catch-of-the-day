@@ -9,6 +9,9 @@ var createBrowserHistory = require('history/lib/createBrowserHistory');
 
 var h = require('./helpers');
 
+var Rebase = require('re-base');
+var base = Rebase.createClass('https://catch-of-the-day-lulz.firebaseio.com/');
+
 /*
     App
  */
@@ -18,6 +21,13 @@ var App = React.createClass({
             fishes: {},
             order: {}
         };
+    },
+
+    componentDidMount: function() {
+        base.syncState(this.props.params.storeId + '/fishes', {
+            context: this,
+            state: 'fishes'
+        });
     },
 
     addToOrder: function(key) {
@@ -217,7 +227,7 @@ var Inventory = React.createClass({
 var StorePicker = React.createClass({
     mixins: [History],
 
-    goToStore: function goToStore(event) {
+    goToStore: function(event) {
         event.preventDefault();
         this.history.pushState(null, '/store/' + this.refs.storeId.value);
     },
